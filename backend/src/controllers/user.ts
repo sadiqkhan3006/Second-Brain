@@ -1,6 +1,7 @@
 require('dotenv').config();
-import { Request, Response } from "express";
-import z, { success } from "zod";
+import { Response } from "express";
+import { AuthenticatedRequest } from "../types";
+import z from "zod";
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -17,7 +18,8 @@ const loginData = signupData.pick({
     username: true,
     password: true
 });
-export async function user_signup(req: Request, res: Response) {
+
+export async function user_signup(req: AuthenticatedRequest, res: Response) {
     try {
         const { success, error } = signupData.safeParse(req.body);
         if (!success) {
@@ -52,7 +54,7 @@ export async function user_signup(req: Request, res: Response) {
         })
     }
 }
-export async function user_signin(req: Request, res: Response) {
+export async function user_signin(req: AuthenticatedRequest, res: Response) {
     try {
         const { username, password }: z.infer<typeof loginData> = req.body;
         const existingUser = await User.findOne({ username }).populate('contents');

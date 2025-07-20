@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
+import "dotenv/config";
 export default async function Dbconnect(): Promise<void> {
     try {
-        await mongoose.connect("mongodb+srv://sadiqkhan3006:lBOcqacheINoGqWf@cluster0.xdkg3bs.mongodb.net/Second-Brain", {
+        const DB_URL = process.env.DB_URL;
+        if (!DB_URL) throw new Error("DB url not defined");
+        await mongoose.connect(DB_URL, {
             family: 4,
         });
         console.log("DB Connected !!");
